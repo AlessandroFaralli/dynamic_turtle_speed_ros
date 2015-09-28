@@ -19,14 +19,12 @@ int main(int argc, char **argv) {
 
   dynamic_reconfigure::Server<dynamic_turtle_speed_ros::velocityConfig> velset;
   dynamic_reconfigure::Server<dynamic_turtle_speed_ros::velocityConfig>::CallbackType f;
-  
+    
   f = boost::bind(&callback, _1, _2);
   velset.setCallback(f);
   ros::NodeHandle n;
   ros::Publisher chatter_pub = n.advertise<geometry_msgs::Twist>("/turtle1/cmd_vel",1000);
   ros::Rate loop_rate(10);
-  int velocity_x = x;
-  int velocity_rotation_z = z;
   int count = 0;
   
   while (ros::ok()){
@@ -42,8 +40,7 @@ int main(int argc, char **argv) {
   loop_rate.sleep();
   ++count;
   }
-  x = 0;
-  z = 0;
+  
   return 0;
 }
 
