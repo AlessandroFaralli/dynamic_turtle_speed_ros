@@ -2,11 +2,12 @@
 
 #include <dynamic_reconfigure/server.h>
 #include <dynamic_turtle_speed_ros/velocityConfig.h>
-
+#include <geometry_msgs/Twist.h>
+#include <std_msgs/Int64.h>
 void callback(dynamic_turtle_speed_ros::velocityConfig &config, uint32_t level) {
   ROS_INFO("Reconfigure Request: %d %d", 
             config.velocity_x, 
-            config.velocity_rotation_z);
+            config.velocity_rotation_z);  
 }
 
 int main(int argc, char **argv) {
@@ -17,9 +18,27 @@ int main(int argc, char **argv) {
 
   f = boost::bind(&callback, _1, _2);
   velset.setCallback(f);
-
-  ROS_INFO("Spinning node");
-  ros::spin();
+  ros::NodeHandle n;
+  ros::Publisher chatter_pub = n.advertise<geometry_msgs::Twist>("/turtle1/cmd_vel",1000);
+  ros::Rate loop_rate(10);
+  //int velocity_x = 1;
+  //int velocity_rotation_z = 10;
+  int count = 0;
+  while (ros::ok()){
+    
+  //geometry_msgs::Twist cmd_velocity;
+  //geometry_msgs::Vector3 linear;
+  //linear.x = velocity_x;
+  //cmd_velocity.linear = linear;
+  //geometry_msgs::Vector3 angular;
+  //angular.z = velocity_rotation_z;
+  //cmd_velocity.angular = angular;
+  //chatter_pub.publish(cmd_velocity);
+  ros::spinOnce();
+  loop_rate.sleep();
+  ++count;
+  }
+  
   return 0;
 }
 
