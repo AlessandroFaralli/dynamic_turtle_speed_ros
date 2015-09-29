@@ -14,12 +14,18 @@ void callback(dynamic_turtle_speed_ros::velocityConfig &config, uint32_t level) 
   z = config.velocity_rotation_z;
 }
 
+void callback2(dynamic_turtle_speed_ros::velocityConfig &config, uint32_t level) {
+  config.velocity_x = 0;
+  config.velocity_rotation_z = 0;
+}
+
 int main(int argc, char **argv) {
   ros::init(argc, argv, "dynamic_turtle_speed_ros");
 
   dynamic_reconfigure::Server<dynamic_turtle_speed_ros::velocityConfig> velset;
   dynamic_reconfigure::Server<dynamic_turtle_speed_ros::velocityConfig>::CallbackType f;
-    
+  dynamic_reconfigure::Server<dynamic_turtle_speed_ros::velocityConfig>::CallbackType f2;
+  
   f = boost::bind(&callback, _1, _2);
   velset.setCallback(f);
   ros::NodeHandle n;
@@ -40,7 +46,8 @@ int main(int argc, char **argv) {
   loop_rate.sleep();
   ++count;
   }
-  
+  f2 = boost::bind(&callback2, _1, _2);
+  velset.setCallback(f2);
   return 0;
 }
 
